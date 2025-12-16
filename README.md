@@ -1,4 +1,4 @@
 # AsterCore Physics
-AsterCore Physics Engine
+Physics Engine
 for indie and AAA game
 Powered by Neofilisoft
