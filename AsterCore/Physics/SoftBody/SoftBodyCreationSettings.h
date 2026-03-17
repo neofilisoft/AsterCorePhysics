@@ -5,6 +5,7 @@
 #pragma once
 
 #include <AsterCore/Physics/SoftBody/SoftBodySharedSettings.h>
+#include <AsterCore/Physics/SoftBody/SoftBodyAdvancedSimulation.h>
 #include <AsterCore/Physics/Collision/ObjectLayer.h>
 #include <AsterCore/Physics/Collision/CollisionGroup.h>
 #include <AsterCore/ObjectStream/SerializableObject.h>
@@ -70,6 +71,9 @@ public:
 	bool				mMakeRotationIdentity = true;		///< Bake specified mRotation in the vertices and set the body rotation to identity (simulation is slightly more accurate if the rotation of a soft body is kept to identity)
 	bool				mAllowSleeping = true;				///< If this body can go to sleep or not
 	bool				mFacesDoubleSided = false;			///< If the faces in this soft body should be treated as double sided for the purpose of collision detection (ray cast / collide shape / cast shape)
+
+	SoftBodyFractureSettings		mFractureSettings;
+	SoftBodySelfCollisionSettings mSelfCollisionSettings; // Advanced runtime settings, legacy binary state helpers do not serialize these yet.
 };
 
 ACPH_NAMESPACE_END
