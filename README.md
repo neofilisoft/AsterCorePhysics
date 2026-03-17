@@ -210,6 +210,7 @@ If you're interested in how AsterCore scales with multiple CPUs and compares to 
 * [Godot](https://github.com/godotengine/godot)
 * [Source Engine](https://github.com/Joshua-Ashton/VPhysics-AsterCore)
 * Unreal Plugin [here](https://github.com/OversizedSunCoreDev/ArtilleryEco) and [here](https://github.com/Yadhu-S/UnrealJolt)
+* Feliss
 
 See [a list of projects that use AsterCore Physics here](Docs/ProjectsUsingJolt.md).
 
