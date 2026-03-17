@@ -1,0 +1,46 @@
+// AsterCore Physics Library (https://github.com/jrouwe/JoltPhysics)
+// SPDX-FileCopyrightText: 2021 Jorrit Rouwe
+// SPDX-License-Identifier: MIT
+
+#pragma once
+
+#include <AsterCore/Core/Result.h>
+#include <AsterCore/ObjectStream/SerializableObject.h>
+
+ACPH_NAMESPACE_BEGIN
+
+class CollisionGroup;
+class StreamIn;
+class StreamOut;
+
+/// Abstract class that checks if two CollisionGroups collide
+class ACPH_EXPORT GroupFilter : public SerializableObject, public RefTarget<GroupFilter>
+{
+	ACPH_DECLARE_SERIALIZABLE_ABSTRACT(ACPH_EXPORT, GroupFilter)
+
+public:
+	/// Virtual destructor
+	virtual						~GroupFilter() override = default;
+
+	/// Check if two groups collide
+	virtual bool				CanCollide(const CollisionGroup &inGroup1, const CollisionGroup &inGroup2) const = 0;
+
+	/// Saves the contents of the group filter in binary form to inStream.
+	virtual void				SaveBinaryState(StreamOut &inStream) const;
+
+	using GroupFilterResult = Result<Ref<GroupFilter>>;
+
+	/// Creates a GroupFilter of the correct type and restores its contents from the binary stream inStream.
+	static GroupFilterResult	sRestoreFromBinaryState(StreamIn &inStream);
+
+protected:
+	/// Don't allow (copy) constructing this base class, but allow derived classes to (copy) construct themselves
+								GroupFilter() = default;
+								GroupFilter(const GroupFilter &) = default;
+	GroupFilter &				operator = (const GroupFilter &) = default;
+
+	/// This function should not be called directly, it is used by sRestoreFromBinaryState.
+	virtual void				RestoreBinaryState(StreamIn &inStream);
+};
+
+ACPH_NAMESPACE_END
