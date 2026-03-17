@@ -1,4 +1,4 @@
-// AsterCore Physics Library (https://github.com/jrouwe/JoltPhysics)
+// AsterCore Physics Library (https://github.com/jrouwe/joltphysics)
 // SPDX-FileCopyrightText: 2026 OpenAI
 // SPDX-License-Identifier: MIT
 
@@ -9,9 +9,13 @@
 #include <AsterCore/Core/Color.h>
 #include <AsterCore/Core/JobSystem.h>
 #include <AsterCore/Core/Reference.h>
+#include <AsterCore/Physics/Body/BodyID.h>
 #include <AsterCore/Physics/Fluid/ParticleFluidSharedBuffer.h>
 
 ACPH_NAMESPACE_BEGIN
+
+class BodyInterface;
+struct ParticleFluidRigidBodyCouplingSettings;
 
 struct ParticleFluidSettings
 {
@@ -57,13 +61,14 @@ public:
 	Ref<ParticleFluidSharedBuffer>	GetSharedBuffer() const					{ return mSharedBuffer; }
 
 	void							Simulate(float inDeltaTime, JobSystem &inJobSystem);
+	void							SimulateCoupled(float inDeltaTime, JobSystem &inJobSystem, BodyInterface &ioBodyInterface, const BodyID *inBodies, uint32 inBodyCount, const ParticleFluidRigidBodyCouplingSettings &inCouplingSettings);
 
 private:
 	struct GridCoordinate
 	{
-		int32						mX = 0;
-		int32						mY = 0;
-		int32						mZ = 0;
+		int							mX = 0;
+		int							mY = 0;
+		int							mZ = 0;
 	};
 
 	void							EnsureCapacity();

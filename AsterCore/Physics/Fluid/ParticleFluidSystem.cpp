@@ -4,8 +4,10 @@
 
 #include <AsterCore/AsterCore.h>
 #include <algorithm>
+#include <cmath>
 
 #include <AsterCore/Physics/Fluid/ParticleFluidSystem.h>
+#include <AsterCore/Physics/Fluid/ParticleFluidRigidBodyCoupling.h>
 
 ACPH_NAMESPACE_BEGIN
 
@@ -76,9 +78,9 @@ auto ParticleFluidSystem::GetGridCoordinate(Vec3Arg inPosition) const -> GridCoo
 	const float inv_cell_size = 1.0f / max(mSettings.mSmoothingRadius, 1.0e-6f);
 	return
 	{
-		int32(Floor(inPosition.GetX() * inv_cell_size)),
-		int32(Floor(inPosition.GetY() * inv_cell_size)),
-		int32(Floor(inPosition.GetZ() * inv_cell_size))
+		int(std::floor(inPosition.GetX() * inv_cell_size)),
+		int(std::floor(inPosition.GetY() * inv_cell_size)),
+		int(std::floor(inPosition.GetZ() * inv_cell_size))
 	};
 }
 
@@ -153,9 +155,9 @@ void ParticleFluidSystem::ComputeDensityPressureRange(uint32 inStart, uint32 inE
 		const GridCoordinate center = GetGridCoordinate(particle.mPosition);
 
 		float density = 0.0f;
-		for (int32 z = -1; z <= 1; ++z)
-			for (int32 y = -1; y <= 1; ++y)
-				for (int32 x = -1; x <= 1; ++x)
+		for (int z = -1; z <= 1; ++z)
+			for (int y = -1; y <= 1; ++y)
+				for (int x = -1; x <= 1; ++x)
 				{
 					const uint32 hash = HashCoordinate({ center.mX + x, center.mY + y, center.mZ + z });
 					for (uint32 sorted = mCellOffsets[hash], end = mCellOffsets[hash + 1]; sorted < end; ++sorted)
@@ -181,9 +183,9 @@ void ParticleFluidSystem::ComputeForceRange(uint32 inStart, uint32 inEnd)
 		Vec3 pressure_force = Vec3::sZero();
 		Vec3 viscosity_force = Vec3::sZero();
 
-		for (int32 z = -1; z <= 1; ++z)
-			for (int32 y = -1; y <= 1; ++y)
-				for (int32 x = -1; x <= 1; ++x)
+		for (int z = -1; z <= 1; ++z)
+			for (int y = -1; y <= 1; ++y)
+				for (int x = -1; x <= 1; ++x)
 				{
 					const uint32 hash = HashCoordinate({ center.mX + x, center.mY + y, center.mZ + z });
 					for (uint32 sorted = mCellOffsets[hash], end = mCellOffsets[hash + 1]; sorted < end; ++sorted)
@@ -221,8 +223,8 @@ void ParticleFluidSystem::IntegrateRange(uint32 inStart, uint32 inEnd, float inD
 		{
 			const float min_bound = mSettings.mBoundsMin[axis];
 			const float max_bound = mSettings.mBoundsMax[axis];
-			float &position = particle.mPosition[axis];
-			float &velocity = particle.mVelocity[axis];
+			float position = particle.mPosition[axis];
+			float velocity = particle.mVelocity[axis];
 
 			if (position < min_bound)
 			{
@@ -289,6 +291,12 @@ void ParticleFluidSystem::PublishRenderBuffer(JobSystem &inJobSystem)
 	mSharedBuffer->EndWrite(uint32(mParticles.size()));
 }
 
+void ParticleFluidSystem::SimulateCoupled(float inDeltaTime, JobSystem &inJobSystem, BodyInterface &ioBodyInterface, const BodyID *inBodies, uint32 inBodyCount, const ParticleFluidRigidBodyCouplingSettings &inCouplingSettings)
+{
+	Simulate(inDeltaTime, inJobSystem);
+	ParticleFluidRigidBodyCoupling::sApply(*this, inBodies, inBodyCount, ioBodyInterface, inJobSystem, inCouplingSettings);
+}
+
 void ParticleFluidSystem::Simulate(float inDeltaTime, JobSystem &inJobSystem)
 {
 	if (mParticles.empty())
@@ -320,3 +328,4 @@ void ParticleFluidSystem::Simulate(float inDeltaTime, JobSystem &inJobSystem)
 }
 
 ACPH_NAMESPACE_END
+
