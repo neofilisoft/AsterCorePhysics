@@ -1,5 +1,5 @@
 # AsterCore Physics
-Physics SDK
+Physics SDK (Core Jolt's fork)
 
 A multi core friendly rigid body physics and collision detection library. Suitable for games and VR applications.
 
