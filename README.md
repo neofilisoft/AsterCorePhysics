@@ -1,6 +1,5 @@
 # AsterCore Physics
 Physics SDK (Core fork from Jolt)
-
 A multi core friendly rigid body physics and collision detection library. Suitable for games and VR applications.
 
 |[![Ragdoll Pile](https://img.youtube.com/vi/pwyCW0yNKMA/hqdefault.jpg)](https://www.youtube.com/watch?v=pwyCW0yNKMA)|
@@ -79,6 +78,16 @@ Why create yet another physics engine? Firstly, it has been a personal learning 
 	* Collision tests against soft bodies.
 * Water buoyancy calculations.
 * An optional double precision mode that allows large worlds.
+
+## AsterCore 2.1 Highlights
+
+1. AsterCore 2.1 broadens the runtime beyond the core rigid body stack. In addition to the existing collision, character, vehicle and soft body systems, this branch now includes destruction tooling for pre-fractured assets, a snapshot foundation for rollback and replay workflows, and a dedicated hair module for strand-oriented simulation utilities.
+
+2. Several gameplay-facing systems have been expanded so the engine is easier to use in real projects. Vehicles now cover wheeled, tracked and motorcycle controllers, water interaction helpers are part of the runtime, secondary motion can be handled through JiggleConstraint, and particle fluid simulation is available for scenes that need lightweight fluid-body interaction.
+
+3. The project is also in a better place as middleware than earlier branches. The CMake setup supports building AsterCore as either a static or shared library, and the README now documents the shared-library path more clearly for engine integration work such as Feliss.
+
+4. Tooling around the runtime has started to catch up with the feature set. This tree includes editor-side asset helpers, integration scaffolding for external engines, Python/C API entry points, and snapshot-aware systems that make it easier to move from isolated physics tests toward full production workflows.
 
 ## Supported platforms
 
@@ -210,7 +219,6 @@ If you're interested in how AsterCore scales with multiple CPUs and compares to 
 * [Godot](https://github.com/godotengine/godot)
 * [Source Engine](https://github.com/Joshua-Ashton/VPhysics-AsterCore)
 * Unreal Plugin [here](https://github.com/OversizedSunCoreDev/ArtilleryEco) and [here](https://github.com/Yadhu-S/UnrealJolt)
-* Feliss
 
 See [a list of projects that use AsterCore Physics here](Docs/ProjectsUsingJolt.md).
 
@@ -223,5 +231,6 @@ The project is distributed under the [MIT license](LICENSE).
 All contributions are welcome! If you intend to make larger changes, please discuss first in the GitHub Discussion section. For non-trivial changes, we require that you agree to a [Contributor Agreement](ContributorAgreement.md). When you create a PR, [CLA assistant](https://cla-assistant.io/) will prompt you to sign it.
 
 Note that all PRs will be squashed before merging, so there's no need to force-push to git to keep the history clean.
+
 
 
