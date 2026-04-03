@@ -86,7 +86,7 @@ Why create yet another physics engine? Firstly, it has been a personal learning 
 
 2. Several gameplay-facing systems have been expanded so the engine is easier to use in real projects. Vehicles now cover wheeled, tracked and motorcycle controllers, water interaction helpers are part of the runtime, secondary motion can be handled through JiggleConstraint, and particle fluid simulation is available for scenes that need lightweight fluid-body interaction.
 
-3. The project is also in a better place as middleware than earlier branches. The CMake setup supports building AsterCore as either a static or shared library, and the README now documents the shared-library path more clearly for engine integration work such as Feliss.
+3. The project is also in a better place as middleware than earlier branches. The CMake setup supports building AsterCore as either a static or shared library, and the README now documents the shared-library path more clearly for engine integration work.
 
 4. Tooling around the runtime has started to catch up with the feature set. This tree includes editor-side asset helpers, integration scaffolding for external engines, Python/C API entry points, and snapshot-aware systems that make it easier to move from isolated physics tests toward full production workflows.
 
