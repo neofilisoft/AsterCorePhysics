@@ -80,108 +80,169 @@ Why create yet another physics engine? Firstly, it has been a personal learning 
 * Water buoyancy calculations.
 * An optional double precision mode that allows large worlds.
 
-## AsterCore 2.1 Highlights
+# AsterCore Physics SDK
 
-1. AsterCore 2.1 broadens the runtime beyond the core rigid body stack. In addition to the existing collision, character, vehicle and soft body systems, this branch now includes destruction tooling for pre-fractured assets, a snapshot foundation for rollback and replay workflows, and a dedicated hair module for strand-oriented simulation utilities.
+AsterCore Physics is a multi-core friendly rigid body physics and collision detection library for games, simulation, and middleware integration work. The runtime is built around deterministic simulation, scalable job scheduling, and an SDK-oriented toolchain that can be embedded into custom engines and external tooling.
 
-2. Several gameplay-facing systems have been expanded so the engine is easier to use in real projects. Vehicles now cover wheeled, tracked and motorcycle controllers, water interaction helpers are part of the runtime, secondary motion can be handled through JiggleConstraint, and particle fluid simulation is available for scenes that need lightweight fluid-body interaction.
+## Design Goals
 
-3. The project is also in a better place as middleware than earlier branches. The CMake setup supports building AsterCore as either a static or shared library, and the README now documents the shared-library path more clearly for engine integration work.
+AsterCore is designed for teams that need more than a closed simulation loop. Modern games stream worlds, run queries in parallel, author destruction offline, replay state during rollback, and integrate physics into larger engine workflows. The library emphasizes:
 
-4. Tooling around the runtime has started to catch up with the feature set. This tree includes editor-side asset helpers, integration scaffolding for external engines, Python/C API entry points, and snapshot-aware systems that make it easier to move from isolated physics tests toward full production workflows.
+- multi-threaded simulation and queries
+- deterministic behavior within documented limits
+- background-friendly content preparation
+- runtime and tooling paths suitable for SDK distribution
+- engine integration through CMake packages, bindings, and native bridges
 
-## Supported platforms
+## Features
 
-* Windows (Desktop or UWP) x86/x64/ARM32/ARM64
-* Linux (tested on Ubuntu) x86/x64/ARM32/ARM64/RISC-V64/LoongArch64/PowerPC64LE
-* FreeBSD
-* Android x86/x64/ARM32/ARM64
-* Platform Blue (a popular game console) x64
-* macOS x64/ARM64
-* iOS x64/ARM64
-* MSYS2 MinGW64
-* WebAssembly, see [this](https://github.com/jrouwe/JoltPhysics.js) separate project.
+- Rigid body simulation with continuous collision detection
+  - sphere
+  - box
+  - capsule and tapered capsule
+  - cylinder and tapered cylinder
+  - convex hull
+  - plane
+  - compound
+  - mesh
+  - terrain / height field
+- Constraint system
+  - fixed
+  - point
+  - distance and spring constraints
+  - hinge
+  - slider
+  - cone
+  - rack and pinion
+  - gear
+  - pulley
+  - path / spline constraints
+  - swing-twist
+  - 6 DOF
+- Collision and queries
+  - ray casts
+  - shape casts
+  - shape-vs-shape tests
+  - broadphase-only overlap queries
+  - sensors / trigger volumes
+- Character simulation
+  - rigid body character
+  - virtual character
+- Vehicles
+  - wheeled vehicles
+  - tracked vehicles
+  - motorcycles
+  - aerodynamic force helpers
+  - water interaction helpers
+- Soft body simulation
+  - cloth and soft body primitives
+  - bend, volume, tether, and skinned constraints
+  - soft body contact callbacks
+- Additional runtime systems
+  - destruction foundations for pre-fractured assets and collapse workflows
+  - snapshot / rollback foundations
+  - particle fluid simulation
+  - VBD tuning utilities
+  - GPU compute scheduling foundation
+  - C API and integration scaffolding
 
-## Required CPU features
+## AsterCore 3.0 Highlights
 
-* On x86/x64 the minimal requirements are SSE2. The library can be compiled using SSE4.1, SSE4.2, AVX, AVX2, or AVX512.
-* On ARM64 the library uses NEON and FP16. On ARM32 it can be compiled without any special CPU instructions.
+1. AsterCore 3.0 expands the project from a physics runtime into a more complete SDK. The core simulation stack is still the backbone, but the repository now includes SDK-facing tooling, exportable CMake packages, and installable artifacts that are easier to hand off to engine, tools, and gameplay teams.
+
+2. The new ACD layer acts as an AsterCore debugger foundation. It captures frame timing, memory usage, determinism checksums, counters, markers, and event streams into structured output that can be archived, inspected offline, or wired into future visualization tools. This is not just for debugging isolated tests; it is intended to support engine integration, profiling, and regression tracking workflows.
+
+3. Fracture authoring has been pushed forward through the new Fractal Editor foundation. SDK users can now author Voronoi, clustered Voronoi, and impact-driven fracture profiles, choose material-driven breakup behavior such as wood-like long shards or glass-like tiny fragments, define wake-up thresholds for static-to-dynamic transitions, and control simplified chunk hierarchy settings for destruction LOD and far-field cleanup.
+
+4. The packaging story has improved significantly. AsterCore 3.0 is structured to be consumed as middleware, with installable headers, libraries, documentation, samples, exported CMake targets, CLI tooling, and integration bridges. This makes it much easier to embed the runtime into custom engines or downstream tools without treating the repository itself as the only supported distribution format.
+
+## Tooling And SDK Modules
+
+- `Tools/ACD`
+  - debugger capture foundation
+  - counters, markers, memory, timing, determinism capture
+  - CLI export path for offline analysis
+- `Tools/FractalEditor`
+  - fracture authoring profiles
+  - Voronoi and clustered fracture presets
+  - impact-point driven authoring
+  - material-based fracture shaping
+  - chunk hierarchy and wake threshold metadata
+- `Tools/Editor`
+  - asset export helpers
+  - destructible asset metadata
+  - fracture authoring data export
+- `Bindings`
+  - C API and integration-oriented native bridges
+- `Integrations`
+  - engine-facing scaffolding for downstream embedding work
 
 ## Documentation
 
-To get started, look at the [HelloWorld](HelloWorld/HelloWorld.cpp) example. A [HelloWorld example using CMake FetchContent](https://github.com/jrouwe/JoltPhysicsHelloWorld) is also available to show how you can integrate AsterCore Physics in a CMake project.
+Start here:
 
-Every feature in AsterCore has its own sample. [Running the Samples application](Docs/Samples.md) and browsing through the [code](https://github.com/jrouwe/JoltPhysics/tree/master/Samples/Tests) is a great way to learn about the library!
+- `HelloWorld/HelloWorld.cpp`
+- `Docs/Architecture.md`
+- `Docs/Samples.md`
+- `Docs/ReleaseNotes.md`
+- `Docs/APIChanges.md`
+- `Docs/ACD.md`
+- `Docs/FractalEditor.md`
 
-To learn more about AsterCore go to the latest [Architecture and API documentation](https://jrouwe.github.io/JoltPhysics/). Documentation for [a specific release is also available](https://jrouwe.github.io/JoltPhysicsDocs/).
+If you install the SDK, the staged documentation and samples are placed under:
 
-Some algorithms used by AsterCore are described in detail in my GDC 2022 talk: Architecting AsterCore Physics for 'Horizon Forbidden West' ([slides](https://gdcvault.com/play/1027560/Architecting-AsterCore-Physics-for-Horizon), [slides with speaker notes](https://jrouwe.nl/architectingjolt/ArchitectingJoltPhysics_Rouwe_Jorrit_Notes.pdf), [video](https://gdcvault.com/play/1027891/Architecting-AsterCore-Physics-for-Horizon)).
+- `share/AsterCore/docs`
+- `share/AsterCore/samples`
 
-## Compiling
+## Building
 
-* Compiles with Visual Studio 2019+, Clang 10+ or GCC 9+.
-* Uses C++ 17.
-* Depends only on the standard template library.
-* Doesn't use RTTI.
-* Doesn't use exceptions.
+- C++17
+- CMake-based build
+- Works as a static or shared library
+- Exported CMake package available through installed SDK artifacts
 
-If you want to run on Platform Blue you'll need to provide your own build environment and PlatformBlue.h due to NDA requirements. This file is available on the Platform Blue developer forum.
+Typical middleware integration flow:
 
-For build instructions go to the [Build](Build/README.md) section. When upgrading from an older version of the library go to the [Release Notes](Docs/ReleaseNotes.md) or [API Changes](Docs/APIChanges.md) sections.
+1. Build and install the SDK.
+2. Point `CMAKE_PREFIX_PATH` at the installed SDK root.
+3. Use `find_package(AsterCore CONFIG REQUIRED)`.
+4. Link against `AsterCore::AsterCore`.
+5. Ship runtime binaries from `bin/` when using shared builds.
 
-### Building the shared library for Feliss integration
+## Folder Structure
 
-The project supports building AsterCore Physics 2.1.0 as a shared library.
+- `AsterCore`
+  - core runtime source
+- `Assets`
+  - assets used by samples, viewer, and test framework
+- `Build`
+  - build helpers and packaging support
+- `Docs`
+  - documentation
+- `HelloWorld`
+  - minimal example
+- `Integrations`
+  - integration scaffolding
+- `Samples`
+  - sample application and scenario coverage
+- `Tools`
+  - editor, debugger, and fracture authoring utilities
+- `UnitTests`
+  - automated test coverage
 
-#### Windows (MSYS2 MinGW64 + Ninja)
+## Middleware Positioning
 
-Configure and build `AsterCore.dll`:
+AsterCore is structured to be embedded into custom engines and tools rather than only used as a monolithic sample application. The repository contains the pieces needed to distribute:
 
-```powershell
-cmake -S . -B build-aster-shared -G Ninja `
-  -DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe `
-  -DBUILD_SHARED_LIBS=ON `
-  -DBUILD_ASTERCORE_UNIT_TESTS=OFF `
-  -DBUILD_ASTERCORE_SAMPLES=OFF `
-  -DBUILD_ASTERCORE_PERFORMANCE_TEST=OFF `
-  -DBUILD_ASTERCORE_VIEWER=OFF `
-  -DBUILD_ASTERCORE_BINDINGS=OFF `
-  -DBUILD_ASTERCORE_EDITOR_TOOLS=OFF `
-  -DBUILD_ASTERCORE_INTEGRATIONS=OFF
+- developer SDKs with headers, libraries, CMake package config, docs, and samples
+- runtime payloads for shared-library deployment
+- editor and authoring support for destruction-heavy workflows
+- native bridges for language and engine integration
 
-cmake --build build-aster-shared --target AsterCore
-```
+## License
 
-Output files:
+The project is distributed under the MIT license. See `LICENSE`.
 
-- `build-aster-shared/AsterCore.dll`
-- `build-aster-shared/libAsterCore.dll.a`
-
-If Feliss links dynamically, ship `AsterCore.dll` next to the Feliss executable or in a directory that is part of the runtime search path.
-
-#### Linux (GCC or Clang + Ninja)
-
-Configure and build `libAsterCore.so`:
-
-```bash
-cmake -S . -B build-aster-shared -G Ninja \
-  -DCMAKE_CXX_COMPILER=g++ \
-  -DBUILD_SHARED_LIBS=ON \
-  -DBUILD_ASTERCORE_UNIT_TESTS=OFF \
-  -DBUILD_ASTERCORE_SAMPLES=OFF \
-  -DBUILD_ASTERCORE_PERFORMANCE_TEST=OFF \
-  -DBUILD_ASTERCORE_VIEWER=OFF \
-  -DBUILD_ASTERCORE_BINDINGS=OFF \
-  -DBUILD_ASTERCORE_EDITOR_TOOLS=OFF \
-  -DBUILD_ASTERCORE_INTEGRATIONS=OFF
-
-cmake --build build-aster-shared --target AsterCore
-```
-
-Typical Linux output files:
-
-- `build-aster-shared/libAsterCore.so`
-- optional symlink/versioned `.so` files depending on generator and toolchain
 
 #### Notes
 
