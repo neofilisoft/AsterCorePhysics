@@ -1,0 +1,19 @@
+﻿{
+  "FileVersion": 3,
+  "Version": 1,
+  "VersionName": "3.1.0",
+  "FriendlyName": "AsterCore Physics",
+  "Description": "AsterCore Physics middleware plugin for Unreal Engine 4 and 5.",
+  "Category": "Physics",
+  "CreatedBy": "Neofilisoft",
+  "CanContainContent": false,
+  "IsBetaVersion": true,
+  "Installed": false,
+  "Modules": [
+    {
+      "Name": "AsterCorePhysicsRuntime",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}
