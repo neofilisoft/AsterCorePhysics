@@ -1,0 +1,22 @@
+// AsterCore Physics Library (https://github.com/neofilisoft/AsterCorePhysics)
+// SPDX-FileCopyrightText: 2021 Jorrit Rouwe
+// SPDX-License-Identifier: MIT
+
+#pragma once
+
+#include <Tests/Test.h>
+
+class ContactManifoldTest : public Test
+{
+public:
+	ACPH_DECLARE_RTTI_VIRTUAL(ACPH_NO_EXPORT, ContactManifoldTest)
+
+	// Description of the test
+	virtual const char *GetDescription() const override
+	{
+		return "Spawns objects at an angle to test if the contact manifold is calculated correctly.";
+	}
+
+	// See: Test
+	virtual void		Initialize() override;
+};

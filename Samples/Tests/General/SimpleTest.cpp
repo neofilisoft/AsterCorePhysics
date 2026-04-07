@@ -1,0 +1,43 @@
+// AsterCore Physics Library (https://github.com/neofilisoft/AsterCorePhysics)
+// SPDX-FileCopyrightText: 2021 Jorrit Rouwe
+// SPDX-License-Identifier: MIT
+
+#include <TestFramework.h>
+
+#include <Tests/General/SimpleTest.h>
+#include <AsterCore/Physics/Collision/Shape/BoxShape.h>
+#include <AsterCore/Physics/Collision/Shape/SphereShape.h>
+#include <AsterCore/Physics/Body/BodyCreationSettings.h>
+#include <AsterCore/Physics/Body/BodyActivationListener.h>
+#include <Layers.h>
+
+ACPH_IMPLEMENT_RTTI_VIRTUAL(SimpleTest)
+{
+	ACPH_ADD_BASE_CLASS(SimpleTest, Test)
+}
+
+SimpleTest::~SimpleTest()
+{
+	// Unregister activation listener
+	mPhysicsSystem->SetBodyActivationListener(nullptr);
+}
+
+void SimpleTest::Initialize()
+{
+	// Register activation listener
+	mPhysicsSystem->SetBodyActivationListener(&mBodyActivationListener);
+
+	// Floor
+	CreateFloor();
+
+	RefConst<Shape> box_shape = new BoxShape(Vec3(0.5f, 1.0f, 2.0f));
+
+	// Dynamic body 1
+	mBodyInterface->CreateAndAddBody(BodyCreationSettings(box_shape, RVec3(0, 10, 0), Quat::sIdentity(), EMotionType::Dynamic, Layers::MOVING), EActivation::Activate);
+
+	// Dynamic body 2
+	mBodyInterface->CreateAndAddBody(BodyCreationSettings(box_shape, RVec3(5, 10, 0), Quat::sRotation(Vec3::sAxisX(), 0.25f * ACPH_PI), EMotionType::Dynamic, Layers::MOVING), EActivation::Activate);
+
+	// Dynamic body 3
+	mBodyInterface->CreateAndAddBody(BodyCreationSettings(new SphereShape(2.0f), RVec3(10, 10, 0), Quat::sRotation(Vec3::sAxisX(), 0.25f * ACPH_PI), EMotionType::Dynamic, Layers::MOVING), EActivation::Activate);
+}
