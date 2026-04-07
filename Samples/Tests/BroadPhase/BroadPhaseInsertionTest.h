@@ -1,0 +1,31 @@
+// AsterCore Physics Library (https://github.com/neofilisoft/AsterCorePhysics)
+// SPDX-FileCopyrightText: 2021 Jorrit Rouwe
+// SPDX-License-Identifier: MIT
+
+#pragma once
+
+#include <Tests/BroadPhase/BroadPhaseTest.h>
+#include <random>
+
+class BroadPhaseInsertionTest : public BroadPhaseTest
+{
+public:
+	ACPH_DECLARE_RTTI_VIRTUAL(ACPH_NO_EXPORT, BroadPhaseInsertionTest)
+
+	// Description of the test
+	virtual const char *	GetDescription() const override
+	{
+		return "Test that adds/removes objects to/from the broadphase and casts a ray through the boxes to see if the collision results are correct.";
+	}
+
+	// Initialize the test
+	virtual void			Initialize() override;
+
+	// Update the test, called before the physics update
+	virtual void			PrePhysicsUpdate(const PreUpdateParams &inParams) override;
+
+private:
+	default_random_engine	mRandomGenerator;
+	size_t					mCurrentBody = 0;
+	int						mDirection = 1;
+};
