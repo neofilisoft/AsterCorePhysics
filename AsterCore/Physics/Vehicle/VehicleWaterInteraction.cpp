@@ -1,5 +1,4 @@
 // AsterCore Physics Library
-// SPDX-FileCopyrightText: 2026 OpenAI
 // SPDX-License-Identifier: MIT
 
 #include <AsterCore/AsterCore.h>
