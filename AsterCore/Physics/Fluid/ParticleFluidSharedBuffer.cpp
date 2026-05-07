@@ -1,5 +1,4 @@
 // AsterCore Physics Library (https://github.com/jrouwe/JoltPhysics)
-// SPDX-FileCopyrightText: 2026 OpenAI
 // SPDX-License-Identifier: MIT
 
 #include <AsterCore/AsterCore.h>
